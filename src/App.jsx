@@ -1,7 +1,10 @@
 import { Element, Link as ScrollLink } from 'react-scroll';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
+import Projects from './components/Projects';
+import RichText from './components/RichText';
+import { getPage } from './lib/contentful';
 
 // Initialize EmailJS with your public key
 emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
@@ -14,6 +17,18 @@ function App() {
   });
   const [submitStatus, setSubmitStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [aboutContent, setAboutContent] = useState(null);
+
+  useEffect(() => {
+    const fetchAboutContent = async () => {
+      const content = await getPage('about');
+      if (content) {
+        setAboutContent(content);
+      }
+    };
+
+    fetchAboutContent();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,67 +114,50 @@ function App() {
           transition={{ duration: 0.5 }}
           className="container mx-auto text-center px-4 sm:px-6 lg:px-8"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-            Hi, I'm <span className="text-secondary">Ian Villanueva</span>
-          </h1>
-          <p className="text-textSecondary text-lg mb-8 max-w-4xl mx-auto">
-            An experienced full-stack software engineer proficient in Laravel PHP, Python, .NET Core C#, 
-            and Node.js, with a strong track record in designing and developing web applications and 
-            integrating APIs. Since 2019, I've worked as an independent contractor, leading migration 
-            projects and quickly adapting to new technologies while collaborating closely with clients 
-            to deliver innovative solutions.
-          </p>
-          <div className="flex justify-center gap-4">
-            <ScrollLink 
-              to="projects" 
-              smooth={true} 
-              duration={500}
-              className="group relative px-6 py-3 overflow-hidden rounded-lg bg-secondary/10 border-2 border-secondary"
-            >
-              <span className="relative z-10 text-secondary group-hover:text-primary transition-colors duration-500">
-                View Projects
-              </span>
-              <div className="absolute inset-0 bg-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-            </ScrollLink>
-            <ScrollLink 
-              to="contact" 
-              smooth={true} 
-              duration={500} 
-              className="px-6 py-3 bg-secondary text-primary rounded-lg hover:bg-secondary/90 transition-colors cursor-pointer"
-            >
-              Contact Me
-            </ScrollLink>
-          </div>
+          {aboutContent && (
+            <div>
+              <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+                {aboutContent.title}
+              </h1>
+              <div className="text-textSecondary text-lg mb-8 max-w-4xl mx-auto">
+                <RichText content={aboutContent.content} />
+              </div>
+              <div className="flex justify-center gap-4">
+                <ScrollLink 
+                  to="projects" 
+                  smooth={true} 
+                  duration={500}
+                  className="group relative px-6 py-3 overflow-hidden rounded-lg bg-secondary/10 border-2 border-secondary"
+                >
+                  <span className="relative z-10 text-secondary group-hover:text-primary transition-colors duration-500">
+                    View Projects
+                  </span>
+                  <div className="absolute inset-0 bg-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                </ScrollLink>
+                <ScrollLink 
+                  to="contact" 
+                  smooth={true} 
+                  duration={500} 
+                  className="px-6 py-3 bg-secondary text-primary rounded-lg hover:bg-secondary/90 transition-colors cursor-pointer"
+                >
+                  Contact Me
+                </ScrollLink>
+              </div>
+            </div>
+          )}
         </motion.div>
       </Element>
 
-      <Element name="projects" className="min-h-screen flex items-center justify-center w-full bg-primary/30">
+      <Element name="projects" className="min-h-screen py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="container mx-auto text-center px-4 sm:px-6 lg:px-8"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-8">
-            Featured <span className="text-secondary">Projects</span>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
+            My <span className="text-secondary">Projects</span>
           </h2>
-          <div className="relative">
-            <div className="absolute inset-0 bg-secondary/5 backdrop-blur-sm rounded-xl"></div>
-            <div className="relative p-8 sm:p-12 rounded-xl border-2 border-secondary/20">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <span className="text-4xl text-secondary mb-4 block">🚀</span>
-                <h3 className="text-2xl font-bold mb-4">Coming Soon</h3>
-                <p className="text-textSecondary">
-                  Exciting projects are in the works! Check back soon to see my latest developments 
-                  and contributions in web development, API integration, and software engineering.
-                </p>
-              </motion.div>
-            </div>
-          </div>
+          <Projects />
         </motion.div>
       </Element>
 
