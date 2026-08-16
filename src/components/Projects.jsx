@@ -35,7 +35,7 @@ export default function Projects() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-[#0B1221] rounded-lg overflow-hidden"
+            className="bg-primaryLight rounded-lg overflow-hidden"
           >
             {project.screenshot && (
               <img
@@ -52,7 +52,7 @@ export default function Projects() {
                 {project.stack?.map((tech, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 text-sm bg-[#62F6FF]/10 text-[#62F6FF] rounded-full"
+                    className="px-3 py-1 text-sm bg-secondary/10 text-secondary rounded-full"
                   >
                     {tech}
                   </span>
@@ -65,14 +65,14 @@ export default function Projects() {
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 text-center px-4 py-2 bg-[#62F6FF] text-[#0B1221] rounded-lg hover:bg-[#62F6FF]/90 transition-colors font-medium"
+                    className="flex-1 text-center px-4 py-2 bg-secondary text-primary rounded-lg hover:bg-secondary/90 transition-colors font-medium"
                   >
                     View Project
                   </a>
                 )}
                 <button
                   onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
-                  className="flex-1 text-center px-4 py-2 bg-transparent text-[#62F6FF] rounded-lg border border-[#62F6FF] hover:bg-[#62F6FF]/10 transition-colors font-medium"
+                  className="flex-1 text-center px-4 py-2 bg-transparent text-secondary rounded-lg border border-secondary hover:bg-secondary/10 transition-colors font-medium"
                 >
                   {expandedProject === project.id ? 'Show Less' : 'Read More'}
                 </button>
@@ -83,7 +83,7 @@ export default function Projects() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mt-6 pt-6 border-t border-[#62F6FF]/20"
+                  className="mt-6 pt-6 border-t border-secondary/20"
                 >
                   <RichText content={project.description} />
                 </motion.div>
